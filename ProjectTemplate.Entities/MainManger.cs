@@ -8,7 +8,8 @@ namespace ProjectTemplate.Entities
 {
     public class MainManager
     {
-        private MainManager() { }
+
+          private MainManager() { }
         private static readonly MainManager instance = new MainManager();
         public static MainManager Instance { get { return instance; } }
 
