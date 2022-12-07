@@ -1,5 +1,6 @@
 ﻿using ProjectTemplate.Model;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -32,6 +33,25 @@ namespace ProjectTemplate.Entities
              
         }
 
+
+        public object BuildStudentList(SqlDataReader reader)
+        {
+            object ret = null;
+            Hashtable hash = new Hashtable();
+            while (reader.Read())
+            {
+                Model.Student student = new Model.Student();
+                int colIdx = reader.GetOrdinal("CustomerName");
+                student.Name = reader.GetString(colIdx);
+                student.Id = reader.GetInt32(reader.GetOrdinal("Id"));
+                hash.Add(student.Id, student);
+
+            }
+
+            ret = hash;
+            return ret;
+        }
+
         void funcRead(SqlDataReader reader)
         {
             while (reader.Read())
@@ -46,6 +66,8 @@ namespace ProjectTemplate.Entities
             try
             {
                 DAL.SqlQuery.RunCommand("select * from Customers", funcRead);
+
+                Hashtable ht  = (Hashtable)  DAL.SqlQuery.RunCommandResult("select * from Customers", BuildStudentList);
             }
             catch(Exception ex)
             {
