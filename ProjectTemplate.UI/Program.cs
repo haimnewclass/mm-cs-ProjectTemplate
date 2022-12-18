@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjectTemplate.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace ProjectTemplate.UI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            MainManager.Instance.Init();
             Application.Run(new Form1());
         }
     }

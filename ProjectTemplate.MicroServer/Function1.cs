@@ -6,7 +6,10 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 using Newtonsoft.Json;
+using ProjectTemplate.Model;
+using System.Collections.Generic;
 
 namespace ProjectTemplate.MicroServer
 {
@@ -21,17 +24,38 @@ namespace ProjectTemplate.MicroServer
 
             string name = req.Query["name"];
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+            Model.Student student = new Model.Student()
+            {
+                Name = "Yossi",
+                Id = 123,
+                Age = 30,
+                Address = "Ben Gurion12 Rishon"
+            };
+
+
+
+            string responseMessage = System.Text.Json.JsonSerializer.Serialize(student);
+
+            Model.Student student2;
+
+            student2 = System.Text.Json.JsonSerializer.Deserialize<Student>(responseMessage);
+
+            Dictionary<int, Student> list = new Dictionary<int, Student>();
+            list.Add(1, new Student() { Address = "aaaaa", Age = 23, Id = 444 });
+            list.Add(2, new Student() { Address = "bbbbb", Age = 23, Id = 444 });
+            list.Add(3, new Student() { Address = "cccccc", Age = 23, Id = 444 });
+
+            responseMessage = System.Text.Json.JsonSerializer.Serialize(list);
+
+            Dictionary<int, Student> list2 = System.Text.Json.JsonSerializer.Deserialize<Dictionary<int, Student>>(responseMessage);
 
 
             Entities.MainManager.Instance.Students.CalcMilga();
             // convert to JSON
+
+
+
 
             return new OkObjectResult(responseMessage);
         }

@@ -9,7 +9,9 @@ namespace ProjectTemplate.Entities
     public class MainManager
     {
 
-          private MainManager() { }
+        private MainManager() {
+           
+        }
         private static readonly MainManager instance = new MainManager();
         public static MainManager Instance { get { return instance; } }
 
@@ -17,6 +19,13 @@ namespace ProjectTemplate.Entities
         public Books Books = new Books();
         public Teachers TeachersTeachers = new Teachers();
 
-   
+        public MyQueue MyQueue ;
+
+        public void Init()
+        {
+            MyQueue = new MyQueue();
+        }
+
+
     }
 }
